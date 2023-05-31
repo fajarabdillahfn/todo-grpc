@@ -21,6 +21,13 @@ message TaskInput {
     string description = 2;
 }
 
+message TaskUpdate {
+    uint64 id = 1;
+    optional string title = 2;
+    optional string description = 3;
+    optional bool is_complete = 4;
+}
+
 message Id {
     uint64 id = 1;
 }
@@ -33,6 +40,6 @@ service TaskService {
     rpc CreateTask (TaskInput) returns (Id);
     rpc GetTasks (google.protobuf.Empty) returns (stream Task);
     rpc GetTaskById (Id) returns (Task);
-    rpc UpdateTask (Task) returns (Task);
+    rpc UpdateTask (TaskUpdate) returns (Task);
     rpc DeleteTask (Id) returns (DeleteResponse);
 }

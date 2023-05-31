@@ -2,20 +2,35 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/fajarabdillahfn/todo-grpc/internal/model"
 )
 
 // Update implements repository.TaskRepository
-func (u *taskUseCaseV1) Update(ctx context.Context, task *model.Task) (*model.Task, error) {
+func (u *taskUseCaseV1) Update(ctx context.Context, task *model.TaskUpdate) (*model.Task, error) {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 
-	_, err := u.taskRepo.GetByID(ctx, task.ID)
+	existingTask, err := u.taskRepo.GetByID(ctx, task.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return u.taskRepo.Update(ctx, task)
+	if task.Title != "" {
+		existingTask.Title = task.Title
+	}
+
+	if task.Description != "" {
+		existingTask.Description = task.Description
+	}
+
+	if task.IsCompleted != nil {
+		existingTask.IsCompleted = *task.IsCompleted
+	}
+
+	fmt.Printf("existingTask: %v\n", existingTask)
+
+	return u.taskRepo.Update(ctx, existingTask)
 }

@@ -26,7 +26,7 @@ type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *TaskInput, opts ...grpc.CallOption) (*Id, error)
 	GetTasks(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TaskService_GetTasksClient, error)
 	GetTaskById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Task, error)
-	UpdateTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*Task, error)
+	UpdateTask(ctx context.Context, in *TaskUpdate, opts ...grpc.CallOption) (*Task, error)
 	DeleteTask(ctx context.Context, in *Id, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
@@ -88,7 +88,7 @@ func (c *taskServiceClient) GetTaskById(ctx context.Context, in *Id, opts ...grp
 	return out, nil
 }
 
-func (c *taskServiceClient) UpdateTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*Task, error) {
+func (c *taskServiceClient) UpdateTask(ctx context.Context, in *TaskUpdate, opts ...grpc.CallOption) (*Task, error) {
 	out := new(Task)
 	err := c.cc.Invoke(ctx, "/todo_grpc.TaskService/UpdateTask", in, out, opts...)
 	if err != nil {
@@ -113,7 +113,7 @@ type TaskServiceServer interface {
 	CreateTask(context.Context, *TaskInput) (*Id, error)
 	GetTasks(*emptypb.Empty, TaskService_GetTasksServer) error
 	GetTaskById(context.Context, *Id) (*Task, error)
-	UpdateTask(context.Context, *Task) (*Task, error)
+	UpdateTask(context.Context, *TaskUpdate) (*Task, error)
 	DeleteTask(context.Context, *Id) (*DeleteResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
@@ -131,7 +131,7 @@ func (UnimplementedTaskServiceServer) GetTasks(*emptypb.Empty, TaskService_GetTa
 func (UnimplementedTaskServiceServer) GetTaskById(context.Context, *Id) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTaskById not implemented")
 }
-func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *Task) (*Task, error) {
+func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *TaskUpdate) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
 }
 func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *Id) (*DeleteResponse, error) {
@@ -208,7 +208,7 @@ func _TaskService_GetTaskById_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _TaskService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Task)
+	in := new(TaskUpdate)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -220,7 +220,7 @@ func _TaskService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/todo_grpc.TaskService/UpdateTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).UpdateTask(ctx, req.(*Task))
+		return srv.(TaskServiceServer).UpdateTask(ctx, req.(*TaskUpdate))
 	}
 	return interceptor(ctx, in, info, handler)
 }

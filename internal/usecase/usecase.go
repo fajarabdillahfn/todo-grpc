@@ -10,6 +10,6 @@ type TaskUseCase interface {
 	GetAll(ctx context.Context) (*[]model.Task, error)
 	GetByID(ctx context.Context, id uint) (*model.Task, error)
 	Create(ctx context.Context, task *model.Task) (uint, error)
-	Update(ctx context.Context, task *model.Task) (*model.Task, error)
+	Update(ctx context.Context, task *model.TaskUpdate) (*model.Task, error)
 	Delete(ctx context.Context, id uint) error
 }

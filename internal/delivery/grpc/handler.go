@@ -61,3 +61,12 @@ func (s *server) transformTaskData(task *task_grpc.Task) *model.Task {
 		UpdatedAt:   updated_at,
 	}
 }
+
+func (s *server) transformTaskUpdateData(task *task_grpc.TaskUpdate) *model.TaskUpdate {
+	return &model.TaskUpdate{
+		ID:          uint(task.GetId()),
+		Title:       task.GetTitle(),
+		Description: task.GetDescription(),
+		IsCompleted: task.IsComplete,
+	}
+}
