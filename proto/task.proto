@@ -5,12 +5,15 @@ package todo_grpc;
 option go_package = "../internal/delivery/grpc/task_grpc";
 
 import "google/protobuf/Empty.proto";
+import "google/protobuf/timestamp.proto";
 
 message Task {
     uint64 id = 1;
     string title = 2;
     string description = 3;
     bool is_complete = 4;
+    google.protobuf.Timestamp      UpdatedAt=5;
+	google.protobuf.Timestamp      CreatedAt=6;
 }
 
 message TasksList {
