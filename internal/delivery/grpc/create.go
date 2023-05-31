@@ -10,7 +10,7 @@ func (s *server) CreateTask(ctx context.Context, task *task_grpc.TaskInput) (*ta
 	taskRPC := task_grpc.Task{
 		Title:       task.GetTitle(),
 		Description: task.GetDescription(),
-		IsComplete:  false,
+		IsCompleted:  false,
 	}
 	taskData := s.transformTaskData(&taskRPC)
 

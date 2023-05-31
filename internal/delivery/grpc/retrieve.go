@@ -7,22 +7,23 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (s *server) GetTasks(_ *emptypb.Empty, stream task_grpc.TaskService_GetTasksServer) error {
-	ctx := context.Background()
-
+func (s *server) GetTasks(ctx context.Context, _ *emptypb.Empty) (*task_grpc.TasksList, error) {
 	tasks, err := s.taskUseCase.GetAll(ctx)
 	if err != nil {
-		return err
+		return nil, err
+	}
+
+	var tasksList = &task_grpc.TasksList{
+		Items: []*task_grpc.Task{},
 	}
 
 	for _, t := range *tasks {
 		taskRPC := s.transformTaskRPC(&t)
 
-		if err := stream.Send(taskRPC); err != nil {
-			return err
-		}
+		tasksList.Items = append(tasksList.Items, taskRPC)
 	}
-	return nil
+
+	return tasksList, nil
 }
 
 func (s *server) GetTaskById (ctx context.Context, id *task_grpc.Id) (*task_grpc.Task, error) {

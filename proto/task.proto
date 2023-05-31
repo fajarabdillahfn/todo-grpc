@@ -11,7 +11,7 @@ message Task {
     uint64 id = 1;
     string title = 2;
     string description = 3;
-    bool is_complete = 4;
+    bool is_completed = 4;
     google.protobuf.Timestamp      UpdatedAt=5;
 	google.protobuf.Timestamp      CreatedAt=6;
 }
@@ -25,7 +25,11 @@ message TaskUpdate {
     uint64 id = 1;
     optional string title = 2;
     optional string description = 3;
-    optional bool is_complete = 4;
+    optional bool is_completed = 4;
+}
+
+message TasksList {
+    repeated Task items = 1;
 }
 
 message Id {
@@ -38,7 +42,7 @@ message DeleteResponse{
 
 service TaskService {
     rpc CreateTask (TaskInput) returns (Id);
-    rpc GetTasks (google.protobuf.Empty) returns (stream Task);
+    rpc GetTasks (google.protobuf.Empty) returns (TasksList);
     rpc GetTaskById (Id) returns (Task);
     rpc UpdateTask (TaskUpdate) returns (Task);
     rpc DeleteTask (Id) returns (DeleteResponse);

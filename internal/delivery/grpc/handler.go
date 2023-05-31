@@ -42,7 +42,7 @@ func (s *server) transformTaskRPC(task *model.Task) *task_grpc.Task {
 		Id:          uint64(task.ID),
 		Title:       task.Title,
 		Description: task.Description,
-		IsComplete:  task.IsCompleted,
+		IsCompleted: task.IsCompleted,
 		CreatedAt:   created_at,
 		UpdatedAt:   updated_at,
 	}
@@ -56,7 +56,7 @@ func (s *server) transformTaskData(task *task_grpc.Task) *model.Task {
 		ID:          uint(task.GetId()),
 		Title:       task.GetTitle(),
 		Description: task.GetDescription(),
-		IsCompleted: task.GetIsComplete(),
+		IsCompleted: task.GetIsCompleted(),
 		CreatedAt:   created_at,
 		UpdatedAt:   updated_at,
 	}
@@ -67,6 +67,6 @@ func (s *server) transformTaskUpdateData(task *task_grpc.TaskUpdate) *model.Task
 		ID:          uint(task.GetId()),
 		Title:       task.GetTitle(),
 		Description: task.GetDescription(),
-		IsCompleted: task.IsComplete,
+		IsCompleted: task.IsCompleted,
 	}
 }
