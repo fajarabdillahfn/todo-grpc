@@ -2,7 +2,15 @@ module github.com/fajarabdillahfn/todo-grpc
 
 go 1.20
 
-require google.golang.org/protobuf v1.30.0
+require (
+	google.golang.org/protobuf v1.30.0
+	gorm.io/gorm v1.25.1
+)
+
+require (
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+)
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
