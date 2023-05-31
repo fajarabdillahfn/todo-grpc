@@ -25,9 +25,9 @@ message Id {
 }
 
 service TaskService {
-    rpc CreateTasks (Task) returns (Id);
+    rpc CreateTask (Task) returns (Id);
     rpc GetTasks (google.protobuf.Empty) returns (TasksList);
     rpc GetTaskById (Id) returns (Task);
-    rpc UpdateTasks (Task) returns (Task);
+    rpc UpdateTask (Task) returns (Task);
     rpc DeleteTask (Id) returns (google.protobuf.Empty);
 }
