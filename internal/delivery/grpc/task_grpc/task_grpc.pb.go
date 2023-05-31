@@ -27,7 +27,7 @@ type TaskServiceClient interface {
 	GetTasks(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TasksList, error)
 	GetTaskById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Task, error)
 	UpdateTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*Task, error)
-	DeleteTask(ctx context.Context, in *Id, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteTask(ctx context.Context, in *Id, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
 type taskServiceClient struct {
@@ -74,8 +74,8 @@ func (c *taskServiceClient) UpdateTask(ctx context.Context, in *Task, opts ...gr
 	return out, nil
 }
 
-func (c *taskServiceClient) DeleteTask(ctx context.Context, in *Id, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *taskServiceClient) DeleteTask(ctx context.Context, in *Id, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
 	err := c.cc.Invoke(ctx, "/todo_grpc.TaskService/DeleteTask", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ type TaskServiceServer interface {
 	GetTasks(context.Context, *emptypb.Empty) (*TasksList, error)
 	GetTaskById(context.Context, *Id) (*Task, error)
 	UpdateTask(context.Context, *Task) (*Task, error)
-	DeleteTask(context.Context, *Id) (*emptypb.Empty, error)
+	DeleteTask(context.Context, *Id) (*DeleteResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -111,7 +111,7 @@ func (UnimplementedTaskServiceServer) GetTaskById(context.Context, *Id) (*Task, 
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *Task) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
 }
-func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *Id) (*emptypb.Empty, error) {
+func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *Id) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
