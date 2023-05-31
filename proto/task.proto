@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todo_grpc;
 
-option go_package = "/task";
+option go_package = "../internal/delivery/grpc/task_grpc";
 
 import "google/protobuf/Empty.proto";
 
