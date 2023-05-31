@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package todo_grpc;
+
+option go_package = "/task";
+
+import "google/protobuf/Empty.proto";
+
+message Task {
+    uint64 id = 1;
+    string title = 2;
+    string description = 3;
+    bool is_complete = 4;
+}
+
+message TasksList {
+    repeated Task data = 1;
+}
+
+message Id {
+    uint64 id = 1;
+}
+
+service TaskService {
+    rpc CreateTasks (Task) returns (Id);
+    rpc GetTasks (google.protobuf.Empty) returns (TasksList);
+    rpc GetTaskById (Id) returns (Task);
+    rpc UpdateTasks (Task) returns (Task);
+    rpc DeleteTask (Id) returns (google.protobuf.Empty);
+}
