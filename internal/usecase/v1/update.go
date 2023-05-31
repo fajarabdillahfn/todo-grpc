@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/fajarabdillahfn/todo-grpc/internal/model"
@@ -29,8 +28,6 @@ func (u *taskUseCaseV1) Update(ctx context.Context, task *model.TaskUpdate) (*mo
 	if task.IsCompleted != nil {
 		existingTask.IsCompleted = *task.IsCompleted
 	}
-
-	fmt.Printf("existingTask: %v\n", existingTask)
 
 	return u.taskRepo.Update(ctx, existingTask)
 }

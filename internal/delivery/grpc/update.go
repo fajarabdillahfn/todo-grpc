@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/fajarabdillahfn/todo-grpc/internal/delivery/grpc/task_grpc"
 )
@@ -14,8 +13,6 @@ func (s *server) UpdateTask(ctx context.Context, task *task_grpc.TaskUpdate) (*t
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Printf("updatedTask: %v\n", updatedTask)
 
 	res := s.transformTaskRPC(updatedTask)
 
