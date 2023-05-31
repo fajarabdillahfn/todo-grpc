@@ -5,18 +5,15 @@ import (
 	"net"
 	"os"
 
-	grpcTaskDelivery "github.com/fajarabdillahfn/todo-grpc/internal/delivery/grpc"
-	pgTaskRepo "github.com/fajarabdillahfn/todo-grpc/internal/repository/postgres"
-	v1TaskUseCase "github.com/fajarabdillahfn/todo-grpc/internal/usecase/v1"
+	"github.com/fajarabdillahfn/todo-grpc/injector"
+	"github.com/fajarabdillahfn/todo-grpc/internal/delivery/grpc/task_grpc"
 	"github.com/fajarabdillahfn/todo-grpc/pkg/db/postgres"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	db := postgres.OpenDB()
-
-	taskRepo := pgTaskRepo.NewPostgresTaskRepository(db)
-	taskUseCase := v1TaskUseCase.NewTaskUseCaseV1(taskRepo)
 
 	netListen, err := net.Listen("tcp", os.Getenv("PORT"))
 	if err != nil {
@@ -24,7 +21,11 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	grpcTaskDelivery.NewTaskServerGrpc(server, taskUseCase)
+
+	taskHandler := injector.InitializedService(db)
+
+	task_grpc.RegisterTaskServiceServer(server, taskHandler)
+	reflection.Register(server)
 
 	log.Printf("Server start at %v", netListen.Addr())
 	err = server.Serve(netListen)

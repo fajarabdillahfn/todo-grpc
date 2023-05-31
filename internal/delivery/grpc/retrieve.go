@@ -7,8 +7,8 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (s *server) GetTasks(ctx context.Context, _ *emptypb.Empty) (*task_grpc.TasksList, error) {
-	tasks, err := s.taskUseCase.GetAll(ctx)
+func (h *Handler) GetTasks(ctx context.Context, _ *emptypb.Empty) (*task_grpc.TasksList, error) {
+	tasks, err := h.taskUseCase.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func (s *server) GetTasks(ctx context.Context, _ *emptypb.Empty) (*task_grpc.Tas
 	}
 
 	for _, t := range *tasks {
-		taskRPC := s.transformTaskRPC(&t)
+		taskRPC := h.transformTaskRPC(&t)
 
 		tasksList.Items = append(tasksList.Items, taskRPC)
 	}
@@ -26,13 +26,13 @@ func (s *server) GetTasks(ctx context.Context, _ *emptypb.Empty) (*task_grpc.Tas
 	return tasksList, nil
 }
 
-func (s *server) GetTaskById (ctx context.Context, id *task_grpc.Id) (*task_grpc.Task, error) {
-	task, err := s.taskUseCase.GetByID(ctx, uint(id.GetId()))
+func (h *Handler) GetTaskById(ctx context.Context, id *task_grpc.Id) (*task_grpc.Task, error) {
+	task, err := h.taskUseCase.GetByID(ctx, uint(id.GetId()))
 	if err != nil {
 		return nil, err
 	}
 
-	res := s.transformTaskRPC(task)
+	res := h.transformTaskRPC(task)
 
 	return res, nil
 }

@@ -7,25 +7,20 @@ import (
 	"github.com/fajarabdillahfn/todo-grpc/internal/model"
 	"github.com/fajarabdillahfn/todo-grpc/internal/usecase"
 	google_protobuf "github.com/golang/protobuf/ptypes/timestamp"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
-type server struct {
+type Handler struct {
 	taskUseCase usecase.TaskUseCase
 	task_grpc.UnimplementedTaskServiceServer
 }
 
-func NewTaskServerGrpc(gServer *grpc.Server, taskUseCase usecase.TaskUseCase) {
-	taskServer := &server{
+func NewTaskHandler(taskUseCase usecase.TaskUseCase) *Handler {
+	return &Handler{
 		taskUseCase: taskUseCase,
 	}
-
-	task_grpc.RegisterTaskServiceServer(gServer, taskServer)
-	reflection.Register(gServer)
 }
 
-func (s *server) transformTaskRPC(task *model.Task) *task_grpc.Task {
+func (h *Handler) transformTaskRPC(task *model.Task) *task_grpc.Task {
 	if task == nil {
 		return nil
 	}
@@ -48,7 +43,7 @@ func (s *server) transformTaskRPC(task *model.Task) *task_grpc.Task {
 	}
 }
 
-func (s *server) transformTaskData(task *task_grpc.Task) *model.Task {
+func (h *Handler) transformTaskData(task *task_grpc.Task) *model.Task {
 	created_at := time.Unix(task.GetCreatedAt().GetSeconds(), 0)
 	updated_at := time.Unix(task.GetUpdatedAt().GetSeconds(), 0)
 
@@ -62,7 +57,7 @@ func (s *server) transformTaskData(task *task_grpc.Task) *model.Task {
 	}
 }
 
-func (s *server) transformTaskUpdateData(task *task_grpc.TaskUpdate) *model.TaskUpdate {
+func (h *Handler) transformTaskUpdateData(task *task_grpc.TaskUpdate) *model.TaskUpdate {
 	return &model.TaskUpdate{
 		ID:          uint(task.GetId()),
 		Title:       task.GetTitle(),

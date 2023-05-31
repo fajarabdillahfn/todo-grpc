@@ -6,15 +6,15 @@ import (
 	"github.com/fajarabdillahfn/todo-grpc/internal/delivery/grpc/task_grpc"
 )
 
-func (s *server) CreateTask(ctx context.Context, task *task_grpc.TaskInput) (*task_grpc.Id, error) {
+func (h *Handler) CreateTask(ctx context.Context, task *task_grpc.TaskInput) (*task_grpc.Id, error) {
 	taskRPC := task_grpc.Task{
 		Title:       task.GetTitle(),
 		Description: task.GetDescription(),
-		IsCompleted:  false,
+		IsCompleted: false,
 	}
-	taskData := s.transformTaskData(&taskRPC)
+	taskData := h.transformTaskData(&taskRPC)
 
-	id, err := s.taskUseCase.Create(ctx, taskData)
+	id, err := h.taskUseCase.Create(ctx, taskData)
 	if err != nil {
 		return nil, err
 	}
