@@ -16,10 +16,6 @@ message Task {
 	google.protobuf.Timestamp      CreatedAt=6;
 }
 
-message TasksList {
-    repeated Task data = 1;
-}
-
 message Id {
     uint64 id = 1;
 }
@@ -30,7 +26,7 @@ message DeleteResponse{
 
 service TaskService {
     rpc CreateTask (Task) returns (Id);
-    rpc GetTasks (google.protobuf.Empty) returns (TasksList);
+    rpc GetTasks (google.protobuf.Empty) returns (stream Task);
     rpc GetTaskById (Id) returns (Task);
     rpc UpdateTask (Task) returns (Task);
     rpc DeleteTask (Id) returns (DeleteResponse);
