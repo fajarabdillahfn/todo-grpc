@@ -16,6 +16,11 @@ message Task {
 	google.protobuf.Timestamp      CreatedAt=6;
 }
 
+message TaskInput {
+    string title = 1;
+    string description = 2;
+}
+
 message Id {
     uint64 id = 1;
 }
@@ -25,7 +30,7 @@ message DeleteResponse{
   }
 
 service TaskService {
-    rpc CreateTask (Task) returns (Id);
+    rpc CreateTask (TaskInput) returns (Id);
     rpc GetTasks (google.protobuf.Empty) returns (stream Task);
     rpc GetTaskById (Id) returns (Task);
     rpc UpdateTask (Task) returns (Task);
