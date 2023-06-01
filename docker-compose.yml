@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  todo-grpc:
+    build: 
+      context: .
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    expose:
+      - "${PORT}"
+  database:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${SQL_PORT}:${SQL_PORT}"

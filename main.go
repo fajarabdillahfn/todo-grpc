@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -15,7 +16,7 @@ import (
 func main() {
 	db := postgres.OpenDB()
 
-	netListen, err := net.Listen("tcp", os.Getenv("PORT"))
+	netListen, err := net.Listen("tcp", fmt.Sprintf(":%s", os.Getenv("PORT")))
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err.Error())
 	}
